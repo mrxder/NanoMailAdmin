@@ -39,6 +39,8 @@ const Domains: FunctionComponent<DomainProps> = (props: DomainProps) => {
         getDomains(auhtVal).then((domains) => {
           setDomains(domains);
         });
+      } else {
+        history.push("./login");
       }
     };
     didMount();

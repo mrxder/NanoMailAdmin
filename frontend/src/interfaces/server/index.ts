@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { request } from "http";
+const sha512: any = require("sha512crypt-node");
 
 const buf2hex = (buffer: ArrayBuffer): string => {
   return Array.prototype.map
@@ -76,6 +77,13 @@ export interface Account {
   sendonly: string;
 }
 
+const checkAndHashAccountPw = (acc: Account) => {
+  const prefix = acc.password.substr(0, 14);
+  if (prefix && prefix !== "{SHA512-CRYPT}") {
+    acc.password = "{SHA512-CRYPT}" + sha512.sha512crypt(acc.password, "a");
+  }
+};
+
 export const getAccounts = async (
   domain: string,
   authVal: string
@@ -97,6 +105,7 @@ export const addAccount = async (
   account: Account,
   authVal: string
 ): Promise<boolean> => {
+  checkAndHashAccountPw(account);
   const url = urlCreator("accounts", "insert");
   const reqConfig: AxiosRequestConfig = {
     headers: { Auth: authVal },
@@ -113,6 +122,7 @@ export const updateAccount = async (
   account: Account,
   authVal: string
 ): Promise<boolean> => {
+  checkAndHashAccountPw(account);
   const url = urlCreator("accounts", "update");
   const reqConfig: AxiosRequestConfig = {
     headers: { Auth: authVal },

@@ -26,7 +26,6 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { setEmitFlags } from "typescript";
 import { Box, Button, ThemeProvider, Typography } from "@material-ui/core";
 import AliasComponent from "../../components/AliasComponent";
-const sha512: any = require("sha512crypt-node");
 
 interface ElementsProps {}
 const Elements: FunctionComponent<ElementsProps> = (props: ElementsProps) => {
@@ -53,7 +52,14 @@ const Elements: FunctionComponent<ElementsProps> = (props: ElementsProps) => {
     }
   };
 
+  const checkLogin = () => {
+    if (!auhtVal) {
+      history.push("./login");
+    }
+  };
+
   useEffect(() => {
+    checkLogin();
     loadAccounts();
     loadAliases();
   }, []);
@@ -74,8 +80,6 @@ const Elements: FunctionComponent<ElementsProps> = (props: ElementsProps) => {
       const result = await updateAccount(account, auhtVal ?? "");
       return result;
     } else {
-      account.password =
-        "{SHA512-CRYPT}" + sha512.sha512crypt(account.password, "a");
       const result = await addAccount(account, auhtVal ?? "");
       loadAccounts();
       return result;

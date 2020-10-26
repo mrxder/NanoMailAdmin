@@ -1,5 +1,10 @@
 import React, { FunctionComponent } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  BrowserRouter,
+} from "react-router-dom";
 
 import Container from "@material-ui/core/Container";
 
@@ -39,12 +44,11 @@ const useStyles = makeStyles((theme) => ({
 
 const App: FunctionComponent = () => {
   const classes = useStyles();
-
   return (
     <Container>
       <CssBaseline />
       <div className={classes.paper}>
-        <Router>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
           <Switch>
             <Route path="/login">
               <Login />
@@ -56,10 +60,10 @@ const App: FunctionComponent = () => {
               <Eelements />
             </Route>
             <Route path="/" exact>
-              <h1>Check and forward?</h1>
+              <Login />
             </Route>
           </Switch>
-        </Router>
+        </BrowserRouter>
         <Box mt={8}>
           <Copyright />
         </Box>
